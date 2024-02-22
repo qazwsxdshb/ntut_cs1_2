@@ -1,14 +1,11 @@
 #include <stdio.h>
 #include <math.h>
 
-int binlen(int tmp){
-    int ans=0;
-    while(tmp>0)
-    {
+void binlen(int tmp,int* ans){
+    while(tmp>0){
         tmp>>=1;
-        if(tmp%2==1){ans+=1;}
+        if(tmp%2==1){*ans+=1;}
     }
-    return ans;
 }
 
 int main(){
@@ -18,9 +15,8 @@ int main(){
         if(tmp1>0){
             tmp2<<=tmp1;
             tmp2+=(int)pow(2,tmp1-1);
-            if (tmp2>=8)
-            {
-                ans+=binlen(tmp2>>2);
+            if (tmp2>=8){
+                binlen(tmp2>>2,&ans);
                 tmp2&=0x7;
             }
         }
