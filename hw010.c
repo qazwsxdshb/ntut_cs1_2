@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <math.h>
 
+int gcd(int a,int b){
+    if(a%b==0){return b;}
+    return gcd(b,a%b);
+}
+
 int catch_int(char* tmp,int co){
     int fake=0;
     while('0'<=(int)*(tmp+co) && (int)*(tmp+co)<='9'){
@@ -32,8 +37,8 @@ int main(){
     }
     
 
-    co=0,neg=1;
-    if(*tmp1=='-'){*tmp1+=1;neg=-1;}
+    co=0;neg=1;
+    if(*tmp1=='-'){co=1;neg=-1;}
     for(i=0;i<3;i++){
         b[i]=catch_int(tmp1,co);
         if(b[i]==0){--i;break;}
@@ -52,6 +57,19 @@ int main(){
     else if(cal[0]=='-'){
         ans[0]=b[1]*a[0]-a[1]*b[0];
         ans[1]=a[1]*b[1];
+        if(ans[0]>ans[1]){
+            int tmp=gcd(ans[0]%ans[1],ans[1]);
+            printf("%d(%d/%d)",ans[0]/ans[1],(ans[0]%ans[1])/tmp,ans[1]/tmp);
+        }
+        else{
+            if(ans[0]>=0){
+                int tmp=gcd(ans[0]%ans[1],ans[1]);
+                printf("%d/%d",ans[0]/tmp,ans[1]/tmp);
+            }
+            else{
+                int tmp=gcd(ans[0]%ans[1],ans[1]);
+                printf("-%d/%d",abs(ans[0]/tmp),abs(ans[1]/tmp));
+            }
+        }
     }
-    printf("%d %d",ans[0],ans[1]);
 }
