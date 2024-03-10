@@ -40,18 +40,13 @@ void start(char tmp[10],int a[3],char cal[1]){
         a[i]=catch_int(tmp,co);
         if(a[i]==-1){--i;break;}
         if(a[i]==0){co+=2;}
-        else{
-            co+=log10(abs(a[i]))+2;
-        }
+        else{co+=log10(abs(a[i]))+2;}
     }
     if(i==3){
         a[0]=neg*(1.0*a[0]*a[2]+a[1]);
-        if(a[2]==0){printf("error\n");cal[0]='e';}
         a[1]=a[2];
     }
-    else{
-        a[0]*=neg;
-    }
+    else{a[0]*=neg;}
 }
 
 int main(){
@@ -69,35 +64,20 @@ int main(){
         
         start(tmp,a,cal);
         start(tmp1,b,cal);
-
-        if(cal[0]=='+'){
-            // printf("%d %d %d %d \n\n",a[0],a[1],b[0],b[1]);
-            ans[0]=b[1]*a[0]+a[1]*b[0];
-            ans[1]=a[1]*b[1];
-            sol(ans);
-        }
-        else if(cal[0]=='-'){
-            ans[0]=b[1]*a[0]-a[1]*b[0];
-            ans[1]=a[1]*b[1];
-            sol(ans);
-        }
-        else if(cal[0]=='*'){
-            ans[0]=b[0]*a[0];
-            ans[1]=a[1]*b[1];
-            sol(ans);
-        }
+        ans[1]=a[1]*b[1];
+        if(cal[0]=='+'){ans[0]=b[1]*a[0]+a[1]*b[0];}
+        else if(cal[0]=='-'){ans[0]=b[1]*a[0]-a[1]*b[0];}
+        else if(cal[0]=='*'){ans[0]=b[0]*a[0];}
         else if(cal[0]=='/'){
-            if(b[0]>0){
-                ans[0]=b[1]*a[0];
-                ans[1]=a[1]*b[0];
-                sol(ans);
-            }
-            else{
-                ans[0]=b[1]*a[0]*-1;
-                ans[1]=a[1]*b[0]*-1;
-                sol(ans);
+            ans[0]=b[1]*a[0];
+            ans[1]=a[1]*b[0];
+            if(b[0]<0){
+                ans[0]*=-1;
+                ans[1]*=-1;
             }
         }
+        sol(ans);
+
         scanf("%s",sqr);
         if(*sqr=='n'){break;}
     }
