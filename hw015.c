@@ -1,21 +1,24 @@
 #include <stdio.h>
 #include <string.h>
-void print(int a){
+
+void print(int a,int x){
     char ans[10];
-    int co=0;
+    int co=0,d=0;
+    int tmp=a;
+    while(tmp>0){tmp/=10;d++;}
+    for(int i=d;i<x;i++){printf("0 ");}
     while(a>0){
         ans[co++]=a%10+'0';
         a/=10;
     }
-    for(int i=co-1;i>=0;i--){
+    for(int i=co-1;i>0;i--){
         printf("%c ",ans[i]);
     }
-    printf("\n");
+    printf("%c\n",ans[0]);
 }
 
-void sorted(int tmp[100],int co){
+void sorted(int tmp[100],int co,int xxx){
     int x,y=0;
-    for(int i=0;i<co;i++){printf("%d ",tmp[i]);}
     for(int u=0;u<co;u++){
         x=0;
         for(int i=u;i<co;i++){
@@ -32,7 +35,7 @@ void sorted(int tmp[100],int co){
     printf("%d\n",co);
     for(int i=co-1;i>=0;i--){
         if(tmp[i]!=x){
-            print(tmp[i]);
+            print(tmp[i],xxx);
         }
         x=tmp[i];
     }
@@ -58,10 +61,9 @@ void sol(int b[100],int a,int co){
             if(in(z,b[u])){stop=1;}
             z[u-i]=b[u];
         }
-        printf("%d   %d\n",xx,stop);
-        if(stop==0){ans[i]=xx;dd++;}
+        if(stop==0){ans[dd]=xx;dd++;}
     }
-    sorted(ans,dd);
+    sorted(ans,dd,a);
 }
 
 int main(){
