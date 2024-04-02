@@ -48,7 +48,6 @@ void cal(char player[9][100],int time){
     catch(plrun,plbon);
     catch(plrun,plbon);
     catch(plrun,plbon);
-
 }
 
 int main(){
