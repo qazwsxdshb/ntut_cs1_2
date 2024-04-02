@@ -77,8 +77,7 @@ int cal(char a[101],char b[101]){
             if(b[i]>a[i]){
                 memcpy(tmp,a,strlen(a));
                 memcpy(tmp1,b,strlen(b));
-                memset(a,0,99);
-                memset(b,0,99);
+                memset(a,0,99);memset(b,0,99);
                 memcpy(b,tmp,strlen(tmp));
                 memcpy(a,tmp1,strlen(tmp1));
                 return 1;
