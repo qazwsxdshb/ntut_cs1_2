@@ -19,31 +19,23 @@ void score(int ans[4]){
     printf("%d",fin);
 }
 
-void sol(int *ans,int tmp,int ud[2],int rl[2],int *back){
-    if(tmp<=2){
-        int ori=*ans,f=ud[tmp%2];
-        *ans=ud[(tmp+1)%2];
-        ud[tmp%2]=ori;
-        ud[(tmp+1)%2]=*back;
-        *back=f;
-    }
-    else if(3<=tmp){
-        int ori=*ans,f=rl[tmp%2];
-        *ans=rl[(tmp+1)%2];
-        rl[tmp%2]=ori;
-        rl[(tmp+1)%2]=*back;
-        *back=f;
-    }
+void sol(int *ans,int tmp,int ud[5]){
+    int d=(tmp>=3?2:0);
+    int ori=*ans,f=ud[tmp%2+d];
+    *ans=ud[(tmp+1)%2+d];
+    ud[tmp%2+d]=ori;
+    ud[(tmp+1)%2+d]=ud[4];
+    ud[4]=f;
 }
 
 int main(){
-    int co,ans[4]={1,1,1,1},ud[4][2]={{3,4},{3,4},{3,4},{3,4}},rl[4][2]={{5,2},{5,2},{5,2},{5,2}},back[4]={6,6,6,6};
+    int co,ans[4]={1,1,1,1},ud[4][5]={{3,4,5,2,6},{3,4,5,2,6},{3,4,5,2,6},{3,4,5,2,6}};
     char tmp[5];
     scanf("%d",&co);
     for(int i=0;i<co;i++){
         for(int u=0;u<4;u++){
             scanf("%s",&tmp[u]);
-            sol(&ans[u],tmp[u]-'0',ud[u],rl[u],&back[u]);
+            sol(&ans[u],tmp[u]-'0',ud[u]);
         }
     }
     score(ans);
