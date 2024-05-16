@@ -5,16 +5,39 @@ typedef enum G_s{Aplus,A,Aduce,Bplus,B,Bduce,Cplus,C,Cduce,F,X}G_t;
 typedef enum GPA_s{b4dot3,b4dot0,b3dot7,b3dot3,b3dot0,b2dot7,b2dot3,b2dot0,b1dot7,b1,b0}GPA_t;
 typedef enum S_s{b90to100,b85to89,b80to84, b77to79,b73to76,b70to72,b67to69,b63to66,b60to62,b1to59,b0to0}S_t;
 
-
 typedef struct {
     const char *string;
     scoreType_t type;
 } TypeMap;
+typedef struct {
+    const char *string;
+    G_t type;
+} TypeMapG;
+typedef struct {
+    const char *string;
+    GPA_t type;
+} TypeMapGPA;
+typedef struct {
+    const char *string;
+    S_t type;
+} TypeMapS;
 
 TypeMap typeMap[] = {
-    {"G", G},{"GPA", GPA},{"S", S},
+    {"G", G},{"GPA", GPA},{"S", S}
+};
+
+TypeMapG typeG[]={
     {"A+",Aplus},{"A",A},{"A-",Aduce},{"B+",Bplus},{"B",B},{"B-",Bduce},{"C+",Cplus},{"C",C},{"C-",Cduce},{"F",F},{"X",X}
 };
+
+TypeMapGPA typeGPA[]={
+    {"4.3",b4dot3},{"4.0",b4dot0},{"3.7",b3dot7},{"3.3",b3dot3},{"3.0",b3dot0},{"2.7",b2dot7},{"2.3",b2dot3},{"2.0",b2dot0},{"1.7",b1dot7},{"1",b1},{"0",b0}
+};
+
+TypeMapS typeS[]={
+    {"90-100",b90to100},{"85-89",b85to89},{"80-84",b80to84},{"77-79",b77to79},{"73-76",b73to76},{"70-72",b70to72},{"67-69",b67to69},{"63-66",b63to66},{"60-62",b60to62},{"1-59",b1to59},{"0",b0to0}
+};
+
 
 typedef union student_s{
     int score;
@@ -24,14 +47,6 @@ typedef union student_s{
     S_t S;
 }student_t;
 
-int find(char tmp[10],enum scoreType_s typ){
-    for (int u=0;u<sizeof(typeMap)/sizeof(typeMap[0]);u++){
-        if (strcmp(tmp,typeMap[u].string)==0){
-            typ=typeMap[u].type;
-            return typ;
-        }
-    }
-}
 int main(){
     int type_co,co,type[10];
     char tmp[10];
@@ -40,7 +55,12 @@ int main(){
     scanf("%d",&type_co);
     for(int i=0;i<type_co;i++){
         scanf("%s",tmp);
-        type[i]=find(tmp,typ);
+        for (int u=0;u<3;u++){
+            if (strcmp(tmp,typeMap[u].string)==0){
+                typ=typeMap[u].type;
+                type[i]=typ;break;
+            }
+        }
     }
     
 
@@ -49,10 +69,35 @@ int main(){
         scanf("%s",stu[i].name);
         for(int u=0;u<type_co;u++){
             scanf("%s",tmp);
-            if(type[i]==0){stu[i].score+=find(tmp,typ);}
-            if(type[i]==1){stu[i].score+=find(tmp,typ);}
-            if(type[i]==2){stu[i].score+=find(tmp,typ);}
+            if(type[i]==0){
+                enum G_s G;
+                for (int u=0;u<11;u++){
+                    if (strcmp(tmp,typeG[u].string)==0){
+                        G=typeG[u].type;
+                        stu[i].score=G;break;
+                    }
+                }
+            }
+            else if(type[i]==1){
+                enum GPA_s GPA;
+                for (int u=0;u<11;u++){
+                    if (strcmp(tmp,typeGPA[u].string)==0){
+                        GPA=typeGPA[u].type;
+                        stu[i].score=GPA;break;
+                    }
+                }
+            }
+            else if(type[i]==2){
+                enum S_s S;
+                for (int u=0;u<11;u++){
+                    if (strcmp(tmp,typeS[u].string)==0){
+                        S=typeS[u].type;
+                        stu[i].score=S;break;
+                    }
+                }
+            }
         }
+        printf("%d\n",stu[i].score);
     }
     
     // for(int i=0;i<co;i++){
