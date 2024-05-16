@@ -7,153 +7,97 @@ typedef enum S_s{b90to100,b85to89,b80to84, b77to79,b73to76,b70to72,b67to69,b63to
 
 typedef struct {
     const char *string;
-    scoreType_t type;
+    union {
+        scoreType_t score_type;
+        G_t g_type;
+        GPA_t gpa_type;
+        S_t s_type;
+    };
 } TypeMap;
-typedef struct {
-    const char *string;
-    G_t type;
-} TypeMapG;
-typedef struct {
-    const char *string;
-    GPA_t type;
-} TypeMapGPA;
-typedef struct {
-    const char *string;
-    S_t type;
-} TypeMapS;
 
-TypeMap typeMap[] = {
-    {"G", G},{"GPA", GPA},{"S", S}
+TypeMap typeMaps[] = {
+    {"G", .score_type = G},
+    {"GPA", .score_type = GPA},
+    {"S", .score_type = S},
+    {"A+", .g_type = Aplus},
+    {"A", .g_type = A},
+    {"A-", .g_type = Aduce},
+    {"B+", .g_type = Bplus},
+    {"B", .g_type = B},
+    {"B-", .g_type = Bduce},
+    {"C+", .g_type = Cplus},
+    {"C", .g_type = C},
+    {"C-", .g_type = Cduce},
+    {"F", .g_type = F},
+    {"X", .g_type = X},
+    {"4.3", .gpa_type = b4dot3},
+    {"4.0", .gpa_type = b4dot0},
+    {"3.7", .gpa_type = b3dot7},
+    {"3.3", .gpa_type = b3dot3},
+    {"3.0", .gpa_type = b3dot0},
+    {"2.7", .gpa_type = b2dot7},
+    {"2.3", .gpa_type = b2dot3},
+    {"2.0", .gpa_type = b2dot0},
+    {"1.7", .gpa_type = b1dot7},
+    {"1", .gpa_type = b1},
+    {"0", .gpa_type = b0},
+    {"90-100", .s_type = b90to100},
+    {"85-89", .s_type = b85to89},
+    {"80-84", .s_type = b80to84},
+    {"77-79", .s_type = b77to79},
+    {"73-76", .s_type = b73to76},
+    {"70-72", .s_type = b70to72},
+    {"67-69", .s_type = b67to69},
+    {"63-66", .s_type = b63to66},
+    {"60-62", .s_type = b60to62},
+    {"1-59", .s_type = b1to59},
+    {"0", .s_type = b0to0}
 };
 
-TypeMapG typeG[]={
-    {"A+",Aplus},{"A",A},{"A-",Aduce},{"B+",Bplus},{"B",B},{"B-",Bduce},{"C+",Cplus},{"C",C},{"C-",Cduce},{"F",F},{"X",X}
-};
+int find(char tmp[10],int sel){
+    for (int u=0;u<sizeof(typeMaps)/sizeof(typeMaps[0]);u++){
+        if (strcmp(tmp,typeMaps[u].string)==0){
+            if(sel==0){return typeMaps[u].score_type;}
+            else if(sel==1){return typeMaps[u].g_type;}
+            else if(sel==2){return typeMaps[u].gpa_type;}
+            else if(sel==3){return typeMaps[u].s_type;}
+        }
+    }
+}
 
-TypeMapGPA typeGPA[]={
-    {"4.3",b4dot3},{"4.0",b4dot0},{"3.7",b3dot7},{"3.3",b3dot3},{"3.0",b3dot0},{"2.7",b2dot7},{"2.3",b2dot3},{"2.0",b2dot0},{"1.7",b1dot7},{"1",b1},{"0",b0}
-};
 
-TypeMapS typeS[]={
-    {"90-100",b90to100},{"85-89",b85to89},{"80-84",b80to84},{"77-79",b77to79},{"73-76",b73to76},{"70-72",b70to72},{"67-69",b67to69},{"63-66",b63to66},{"60-62",b60to62},{"1-59",b1to59},{"0",b0to0}
-};
-
-
-typedef union student_s{
+typedef struct student_s{
+    char name[10];
     int score;
-    char *name;
-    G_t G;
-    GPA_t GPA;
-    S_t S;
 }student_t;
 
 int main(){
+    int ans[11]={95,87,82,78,75,70,68,65,60,50,0};
     int type_co,co,type[10];
     char tmp[10];
-    student_t stu[10];
-    enum scoreType_s typ;
     scanf("%d",&type_co);
     for(int i=0;i<type_co;i++){
         scanf("%s",tmp);
-        for (int u=0;u<3;u++){
-            if (strcmp(tmp,typeMap[u].string)==0){
-                typ=typeMap[u].type;
-                type[i]=typ;break;
-            }
-        }
+        type[i]=find(tmp,0);
     }
     
-
     scanf("%d",&co);
+    student_t stu[10];
     for(int i=0;i<co;i++){
         scanf("%s",stu[i].name);
         for(int u=0;u<type_co;u++){
             scanf("%s",tmp);
-            if(type[i]==0){
-                enum G_s G;
-                for (int u=0;u<11;u++){
-                    if (strcmp(tmp,typeG[u].string)==0){
-                        G=typeG[u].type;
-                        stu[i].score=G;break;
-                    }
-                }
-            }
-            else if(type[i]==1){
-                enum GPA_s GPA;
-                for (int u=0;u<11;u++){
-                    if (strcmp(tmp,typeGPA[u].string)==0){
-                        GPA=typeGPA[u].type;
-                        stu[i].score=GPA;break;
-                    }
-                }
-            }
-            else if(type[i]==2){
-                enum S_s S;
-                for (int u=0;u<11;u++){
-                    if (strcmp(tmp,typeS[u].string)==0){
-                        S=typeS[u].type;
-                        stu[i].score=S;break;
-                    }
-                }
-            }
+            if(u==0){stu[i].score=ans[find(tmp,type[u]+1)];}
+            else{stu[i].score+=ans[find(tmp,type[u]+1)];}
         }
-        printf("%d\n",stu[i].score);
     }
-    
-    // for(int i=0;i<co;i++){
-    //     scanf("%s",stu[i].id);
-    //     for(int u=0;u<type_co;u++){
-    //         scanf("%s",stu[i].type[u]);
-    //     }
-    // }
 
-    // sol(stu,co,type_co);
+    for(int i=0;i<co;i++){
+        int min=0;
+        for(int u=0;u<co;u++){
+            if(stu[min].score>stu[u].score){min=u;}
+        }
+        printf("%s %d\n",stu[min].name,stu[min].score/type_co);
+        stu[min].score=100000;
+    }
 }
-// typedef struct hw023{
-//     char id[10];
-//     char type[10][10];
-// } student;
-
-// void sol(student stu[10],int co,int type_co){
-    // char *finid[10];
-    // int finans[10]={0};
-    // char Grade[11][3]={"A+","A","A-","B+","B","B-","C+","C","C-","F","X"};
-    // char GPA[11][4]={"4.3","4.0","3.7","3.3","3.0","2.7","2.3","2.0","1.7","1","0"};
-    // char per[11][10]={"90-100","85-89","80-84","77-79","73-76","70-72","67-69","63-66","60-62","1-59","0"};
-//     int ans[11]={95,87,82,78,75,70,68,65,60,50,0};
-//     for(int sel=0;sel<co;sel++){
-//         int fin=0;
-//         for(int i=0;i<type_co;i++){
-//             if('A'<=stu[sel].type[i][0] && stu[sel].type[i][0]<='X'){
-//                 for(int u=0;u<11;u++){
-//                     if(strcmp(Grade[u],stu[sel].type[i])==0){fin+=ans[u];}
-//                 }
-//             }
-
-//             else if('.'==stu[sel].type[i][1]){
-//                 for(int u=0;u<11;u++){
-//                     if(strcmp(GPA[u],stu[sel].type[i])==0){fin+=ans[u];}
-//                 }
-//             }
-
-//             else if('-'==stu[sel].type[i][2] || '-'==stu[sel].type[i][1]){
-//                 for(int u=0;u<11;u++){
-//                     if(strcmp(per[u],stu[sel].type[i])==0){fin+=ans[u];}
-//                 }
-//             }
-//             else if('1'==stu[sel].type[i][0]){fin+=50;}
-            
-//         }
-//         finid[sel]=stu[sel].id;
-//         finans[sel]=fin/type_co;
-//     }
-//     for(int i=0;i<co;i++){
-//         int min=0;
-//         for(int u=1;u<co;u++){
-//             if(finans[min]>finans[u]){min=u;}
-//         }
-//         printf("%s %d\n",finid[min],finans[min]);
-//         finans[min]=1000;
-//     }
-    
-// }
