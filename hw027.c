@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define min(a,b)(a>b?b:a);
+#define max(a,b)(a>b?a:b);
 
 typedef struct work_t{
     int pointer;
@@ -9,8 +9,8 @@ typedef struct work_t{
 }work;
 
 int main(){
-    int N,M,co=0;
-    int ww[10][100]={0},www[10]={0},ans=0;
+    int N,M,co=0,fin=0;
+    int ww[10][100]={0},machine_hour[10]={0},work_hour[10]={0},ans[10]={0};
     scanf("%d %d",&N,&M);
     work wor[M];
     for(int i=0;i<M;i++){
@@ -24,22 +24,22 @@ int main(){
         int min=-1;
         for(int i=0;i<M;i++){
             if(wor[i].pointer<wor[i].process){
-                int zz=0;
-                for(int z=0;z<M;z++){if(i+1==(ww[z][www[z]])){zz=1;break;}}
-                if(zz==1){NULL;}
-                else if(min==-1){min=i;}
-                else if(wor[min].hour[wor[min].pointer]+www[wor[min].machine[wor[min].pointer]]>wor[i].hour[wor[i].pointer]+www[wor[i].machine[wor[i].pointer]]){min=i;}
+                if(min==-1){min=i;}
+                int tmp=max(machine_hour[wor[min].machine[wor[min].pointer]],work_hour[min]);
+                int tmp1=max(machine_hour[wor[i].machine[wor[i].pointer]],work_hour[i]);
+                if(wor[min].hour[wor[min].pointer]+tmp>wor[i].hour[wor[i].pointer]+tmp1){min=i;}
             }
         }
-        printf("%d",www[wor[min].machine[wor[min].pointer]]);
+        int tmp=max(machine_hour[wor[min].machine[wor[min].pointer]],work_hour[min]);
         for(int i=0;i<wor[min].hour[wor[min].pointer];i++){
-            ww[wor[min].machine[wor[min].pointer]][i+www[wor[min].machine[wor[min].pointer]]]=min+1;
+            ww[wor[min].machine[wor[min].pointer]][i+tmp]=min+1;
+            machine_hour[wor[min].machine[wor[min].pointer]]=i+tmp+1;
         }
-        www[wor[min].machine[wor[min].pointer]]+=wor[min].hour[wor[min].pointer];
+        work_hour[min]=tmp+wor[min].hour[wor[min].pointer];
+        ans[min]=work_hour[min];
         wor[min].pointer++;
-        for(int i=0;i<3;i++){printf("\n");for(int u=0;u<30;u++){printf("%d ",ww[i][u]);}}printf("\n");
-        for(int i=0;i<3;i++){printf("%d ",www[i]);}
-        printf("\n\n\n");
     }
+    for(int i=0;i<M;i++){fin+=ans[i];}
+    printf("%d",fin);
 
 }
