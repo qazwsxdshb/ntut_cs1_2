@@ -4,8 +4,8 @@
 
 typedef struct dnode_s {
     int data;
-    struct dnode_s * front;
-    struct dnode_s * back;
+    struct dnode_s *front;
+    struct dnode_s *back;
 } node_t;
 node_t *head=NULL;
 node_t *tail=NULL;
