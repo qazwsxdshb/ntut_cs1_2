@@ -14,7 +14,7 @@ node_t *tail[10]={0};
 void print(int size,int co){
     int machine[10][100]={0},work[10]={0},mech_time[10]={0},sel,t=0;
     while(co!=t++){
-        int min=INT16_MAX;
+        int min=9999999;
         for(int i=0;i<size;i++){
             if(head[i]==NULL){NULL;}
             else{
@@ -25,23 +25,15 @@ void print(int size,int co){
                 }
             }
         }
-
-        // printf("mech:%d time:%d\n\n",head[sel]->machine,head[sel]->time);
         int tmp=max(mech_time[head[sel]->machine],work[sel]);
         for(int i=0;i<head[sel]->time;i++){machine[head[sel]->machine][tmp+i]=sel+1;}
         mech_time[head[sel]->machine]=tmp+head[sel]->time;
         work[sel]=tmp+head[sel]->time;
         head[sel]=head[sel]->next;
-        
-        // for(int i=0;i<3;i++){
-        //     for(int u=0;u<30;u++){
-        //         printf("%d ",machine[i][u]);
-        //     }printf("\n\n");
-        // }
     }
 
     int ans=0,coo[10]={0};
-    for(int i=0;i<3;i++){
+    for(int i=0;i<10;i++){
         for(int u=0;u<100;u++){
             if(machine[i][u]!=0){
                 coo[machine[i][u]-1]=max(coo[machine[i][u]-1],u+1);
