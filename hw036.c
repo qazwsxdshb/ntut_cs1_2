@@ -20,9 +20,7 @@ void print(int size,int co){
             else{
                 int tmp=max(mech_time[head[i]->machine],work[i]);
                 int value=tmp+head[i]->time;
-                if(min>value){
-                    min=value;sel=i;
-                }
+                if(min>value){min=value;sel=i;}
             }
         }
         int tmp=max(mech_time[head[sel]->machine],work[sel]);
